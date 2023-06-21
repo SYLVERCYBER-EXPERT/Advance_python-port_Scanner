@@ -1,10 +1,9 @@
 
-import threading
 import os
 import socket
 import argparse
 import logging
-
+import threading
 
 def connection_scan(target_ip, target_port):
     """Attempt to create a socket connection with the given IP address and port.
@@ -15,6 +14,8 @@ def connection_scan(target_ip, target_port):
             result = conn_socket.connect_ex((target_ip, target_port))
             if result == 0:
                 logging.info("[+] {}/tcp open".format(target_port))
+                banner = conn_socket.recv(1024).decode().strip()
+                logging.info("    Banner: {}".format(banner))
             else:
                 logging.info("[-] {}/tcp closed".format(target_port))
     except OSError as e:
